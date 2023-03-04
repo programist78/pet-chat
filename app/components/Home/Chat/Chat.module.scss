@@ -1,0 +1,47 @@
+.back{
+    display: flex;
+    // justify-content: center;
+    margin-top: 100px;
+    padding-top: 0.5vw;
+    margin-left: 100px;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(180deg, #78009624 0%, #4f0ffe24   100%);
+    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(25px);
+    border: solid 1px white;
+    border-radius: 10px 25px 25px 10px;
+    width: 35vw;
+    height: 34.75vw;
+    gap: 0.5vw;
+}
+
+.chat_window{
+    border-radius: 17.5px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgb(255, 255, 255);
+    -webkit-backdrop-filter: blur(25px);
+    backdrop-filter: blur(25px);
+    width: 34vw;
+    min-height: 30vw;
+}
+
+.sendler{
+    display: flex;
+    flex-direction: row;
+    width: 30vw;
+    justify-content: space-between;
+    input{
+        width: 25vw;
+        height: 3vw;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.123);
+    }
+}
+
+.send{
+    width: 4vw;
+    background-color: #4f0ffe24;
+    border-radius: 10px;
+    height: 3vw;
+}

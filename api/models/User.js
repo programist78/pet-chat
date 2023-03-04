@@ -19,9 +19,7 @@ const User = new mongoose.Schema(
     },
     status: {type: String},
     token: { type: String },
-    confirmationCode: { type: String }, 
-    balance: {type: Number},
-    donate: {type: Number},
+    friends: { type: mongoose.Schema.Types.Array},
     avatarUrl: { type: String },
   },
   {
