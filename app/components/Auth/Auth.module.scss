@@ -1,0 +1,52 @@
+.preback {
+  width: 100vw;
+  height: auto;
+  padding: 225px;
+  display: flex;
+  justify-content: center;
+}
+
+.back {
+  width: 500px;
+  padding: 25px;
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+  background-color: rgba(255, 255, 255, 0.153);
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 1rem;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
+  input {
+    // width: auto;
+    background-color: darkblue;
+    height: 2rem;
+    width: 400px;
+    font-size: 1rem;
+  }
+  button {
+    width: 300px;
+    height: 1.75rem;
+  }
+}
+
+.title {
+  color: black;
+  font-size: 2.5rem;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  gap: 10px;
+  button {
+    border-radius: 20px;
+    width: 300px;
+    height: 40px;
+    border: 0.5px solid white;
+    color: white;
+    background: linear-gradient(180deg, #2b00ff52 30%, #dc18b88f 100%);
+  }
+}

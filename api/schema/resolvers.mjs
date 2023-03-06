@@ -33,6 +33,88 @@ const resolvers = {
     },
     
     Mutation: {
+        //friends
+        sendFriendRequest: async (parent, {from_email, nick}) => {
+            const user_from = await User.findOne(
+                {email: from_email}
+                );
+                if (!user_from) {
+                    throw new ValidationError("Invalid email given");
+                }
+            const user_start = await User.findOne(
+                {nick}
+                );
+                if (!user_start) {
+                    throw new ValidationError("User is undefined");
+                }
+                const for_sent = {email: user_start.email, nick: user_start.nick}
+                const for_pending = {email: user_from.email, nick: user_from.nick}
+            const user_from_end = await User.findByIdAndUpdate(
+                user_from.id,
+                {$push: { friend_sent: for_sent}},
+                { new: true }
+            );
+            const user = await User.findByIdAndUpdate(
+                user_start.id,
+                {$push: { friend_pending: for_pending}},
+                { new: true }
+            );
+            return user
+        },
+        acceptFriendRequest: async (parent, {from_email, to_email}) => {
+            const user_start = await User.findOne(
+                {email: to_email}
+                );
+                if (!user_start) {
+                    throw new ValidationError("User is undefined");
+            }
+            const user_from = await User.findOne(
+                {email: from_email}
+                );
+                if (!user_from) {
+                    throw new ValidationError("Invalid email given");
+            }
+            const for_sent = {email: user_start.email, nick: user_start.nick}
+            const for_pending = {email: user_from.email, nick: user_from.nick}
+            const user_from_end = await User.findByIdAndUpdate(
+                user_from.id,
+                {$push: { friends: for_sent}, $pull: { friend_sent: for_sent}},
+                { new: true }
+            );
+            const user = await User.findByIdAndUpdate(
+                user_start.id,
+                {$push: { friends: for_pending}, $pull: { friend_pending: for_pending}},
+                { new: true }
+            );
+            return user
+        },
+        rejectFriendRequest: async (parent, {from_email, to_email}) => {
+            const user_start = await User.findOne(
+                {email: to_email}
+                );
+                if (!user_start) {
+                    throw new ValidationError("User is undefined");
+            }
+            const user_from = await User.findOne(
+                {email: from_email}
+                );
+                if (!user_from) {
+                    throw new ValidationError("Invalid email given");
+            }
+            const for_sent = {email: user_start.email, nick: user_start.nick}
+            const for_pending = {email: user_from.email, nick: user_from.nick}
+            const user_from_end = await User.findByIdAndUpdate(
+                user_from.id,
+                {$pull: { friend_sent: for_sent}},
+                { new: true }
+            );
+            const user = await User.findByIdAndUpdate(
+                user_start.id,
+                {$pull: { friend_pending: for_pending}},
+                { new: true }
+            );
+            return user
+        },
         //message
         postMessage: async (parent,{ user,  content, id }) => {
             const message = new Messages({ user, content, id })
@@ -43,8 +125,7 @@ const resolvers = {
         //auth
         registerUser: async(parent, args, context, info) => {
             try {
-                const {email, password, fullname} = args.about
-                const {id} = args
+                const {email, password, nick} = args.about
             const already_exsist = await User.findOne({ email });
             if (already_exsist) {
             throw new ValidationError("Email already exists");
@@ -54,7 +135,7 @@ const resolvers = {
             const passwordHash = await bcrypt.hash(password, salt);
             let math = Math.random() * (43564389374833)
             let confirmationCode = Math.round(math)
-            const user = new User({ fullname, email, passwordHash, role:"ADMIN",avatarUrl:url, status: "PENDING", confirmationCode, balance: "0", donate:"0"})
+            const user = new User({ nick, email, passwordHash, role:"USER",avatarUrl:url, status: "PENDING", confirmationCode, balance: "0", donate:"0"})
             let result = await user.save()
             result = await serializeUser(result);
             //transporter

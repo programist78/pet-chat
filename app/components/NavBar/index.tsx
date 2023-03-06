@@ -3,6 +3,7 @@ import styles from './NavBar.module.scss'
 import {BiUserPlus} from 'react-icons/bi'
 import { useState } from 'react'
 import { useSpring, animated } from '@react-spring/web'
+import Link from 'next/link'
 export default function NavBar() {
     const [openMenu, setOpenMenu] = useState(false)
     const props = useSpring({
@@ -24,9 +25,10 @@ export default function NavBar() {
                 {openMenu && 
                 <animated.div style={props2}>
                 <div className={styles.menu}>
-                    <p>Login</p>
+                    <Link href="/auth/login"><p>Login</p></Link>
                     <p>Profile</p>
                     <p>Friends</p>
+                    <Link href="/"><p>Home</p></Link>
                 </div>
                 </animated.div>
                 }

@@ -157,27 +157,14 @@ function LoginCom() {
             </span>
             <span className={`ripple ${ripple}`}></span>
           </div>
-          <div className="pass-strength">
-            <div className="strength-percent">
-              <span className={precentBar}></span>
-            </div>
-            <span className="strength-label">{passLabel}</span>
-          </div>
         </div>
         <div className={styles.form_group}>
           <button type="submit" className="btn btn-primary">
             Register
           </button>
-          <button
-            type="button"
-            onClick={reset}
-            className="btn btn-warning float-right"
-          >
-            Reset
-          </button>
         </div>
         <Link href="/auth/register" style={{ color: 'black' }}>
-          <h3>Register</h3>
+          <h3>I wanna Register</h3>
         </Link>
       </form>
     </div>

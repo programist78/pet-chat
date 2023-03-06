@@ -4,7 +4,15 @@ import { ApolloClient } from '@apollo/client/core/ApolloClient.js'
 import { createUploadLink } from 'apollo-upload-client'
 import nextApp, { AppContext } from 'next/app.js'
 import { createElement as h, useState, useEffect } from 'react'
+import { ApolloProvider } from '@apollo/client'
+import { Provider } from 'react-redux'
+import store, { persistor } from '../redux/store.jsx'
 import { useRouter } from 'next/router'
+import { ApolloCache } from '@apollo/client/core'
+import { AuthProvider } from '../hooks/AuthContext.jsx'
+import { SessionProvider } from 'next-auth/react'
+import { PersistGate } from 'redux-persist/integration/react'
+import Loader from '../components/Loader'
 // import { appWithTranslation } from 'next-i18next'
 import * as core from '@apollo/client/core'
 import type { AppProps } from 'next/app'
@@ -55,24 +63,28 @@ AppProps) => {
     return <></>
   }
   return (
-    <>
-              {
-                loadingcomponent ? (
-                  // <Loader />
-                  <h1>Loading....</h1>
-                ) : (
+    <SessionProvider session={pageProps.session}>
+      <ApolloProvider client={apolloClient}>
+        <Provider store={store}>
+          <AuthProvider>
+            <PersistGate persistor={persistor}>
+              {loadingcomponent ? (
+                <Loader />
+              ) : (
                 <>
-                    {/* <Head></Head> */}
-                    <RootLayout>
-                           <main className={orbitron.className}>
-                          <Component {...pageProps} />
-                             </main>
-                             </RootLayout>
-                        </>
-                )
-               
-              }
-    </>
+                  {/* <Head></Head> */}
+                  <RootLayout>
+                    <main className={orbitron.className}>
+                      <Component {...pageProps} />
+                    </main>
+                  </RootLayout>
+                </>
+              )}
+            </PersistGate>
+          </AuthProvider>
+        </Provider>
+      </ApolloProvider>
+    </SessionProvider>
   )
 }
 if (typeof window === 'undefined')

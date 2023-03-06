@@ -2,8 +2,9 @@ import mongoose from 'mongoose';
 
 const User = new mongoose.Schema(
   {
-    fullname: {
-      type: String
+    nick: {
+      type: String,
+      unique: true
     },
     email: {
       type: String,
@@ -19,6 +20,8 @@ const User = new mongoose.Schema(
     },
     status: {type: String},
     token: { type: String },
+    friend_sent: { type: mongoose.Schema.Types.Array },
+    friend_pending: { type: mongoose.Schema.Types.Array },
     friends: { type: mongoose.Schema.Types.Array},
     avatarUrl: { type: String },
   },

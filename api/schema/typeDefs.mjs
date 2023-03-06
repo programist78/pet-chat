@@ -9,16 +9,22 @@ const typeDefs = `#graphql
   USER
   ADMIN
   }
+  type Friend {
+    email: String
+    nick: String
+  }
   type User{
     id: ID
     fullname: String
     email: String
     role: String
-    password: String
     balance: String
     donate: String
     status: String
     avatarUrl: String
+    friend_sent: [Friend]
+    friend_pending: [Friend]
+    friends: [Friend]
   }
   type AuthPayload {
     user: User
@@ -41,7 +47,7 @@ const typeDefs = `#graphql
   }
 
   input RegisterInput{
-    fullname: String!
+    nick: String!
     email: String!
     password: String!
     confirm_password: String!
@@ -50,8 +56,12 @@ const typeDefs = `#graphql
   type Mutation {
     postMessage(id: ID, user: String, content: String): ID
 
+    sendFriendRequest(from_email: String, nick: String) : User
+    acceptFriendRequest(from_email: String, to_email: String) : User
+    rejectFriendRequest(from_email: String, to_email: String) : User
+
     loginUser(about: LoginInput!): AuthPayload
-    registerUser(id: ID, about: RegisterInput!): AuthPayload
+    registerUser(about: RegisterInput!): AuthPayload
     changeStatus(id: ID, confirmationCode: String): User
     changeUserLogo(id: ID, file: [Upload]): AuthPayload
   }
