@@ -9,7 +9,7 @@ mutation LoginUser($about: LoginInput!) {
       balance
       email
       donate
-      fullname
+      nick
       role
       id
       status
@@ -39,7 +39,7 @@ mutation RegisterUser($about: RegisterInput!) {
       balance
       email
       donate
-      fullname
+      nick
       role
       id
       status
@@ -67,7 +67,7 @@ export const GET_USER = gql`
         balance
         email
         donate
-        fullname
+        nick
         role
         id
         status
@@ -90,7 +90,7 @@ export const GET_USER = gql`
 export const GET_USER_NAME = gql`
   query GetUser($email: String) {
     getUser(email: $email) {
-      fullname
+      nick
     }
   }
 `
@@ -103,7 +103,7 @@ export const CHANGE_USER_LOGO = gql`
         balance
         email
         donate
-        fullname
+        nick
         role
         id
         status
@@ -131,7 +131,7 @@ export const CHANGE_STATUS = gql`
         balance
         email
         donate
-        fullname
+        nick
         role
         id
         status
@@ -149,4 +149,31 @@ export const CHANGE_STATUS = gql`
         }
     }
   }
+`
+
+export const SEND_FRIEND = gql`
+mutation SendFriendRequest($fromEmail: String, $nick: String) {
+  sendFriendRequest(from_email: $fromEmail, nick: $nick) {
+    avatarUrl
+    balance
+    donate
+    friend_pending {
+      email
+      nick
+    }
+    email
+    friend_sent {
+      email
+      nick
+    }
+    friends {
+      email
+      nick
+    }
+    id
+    nick
+    role
+    status
+  }
+}
 `

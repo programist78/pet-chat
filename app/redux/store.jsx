@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { authReducer } from './slices/auth'
 import { adminReducer } from './slices/roles/admin'
 import { peopleReducer } from './slices/roles/people'
+import { userInfoReducer } from './slices/user'
 import storage from 'redux-persist/lib/storage'
 import {
   persistStore,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   admin: adminReducer,
   people: peopleReducer,
   cart: cartReducer,
+  info: userInfoReducer
 })
 
 const persistConfig = {

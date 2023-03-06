@@ -10,8 +10,10 @@ import { useSession } from 'next-auth/react'
 import styles from './Auth.module.scss'
 import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link'
+import { setUser } from '@/redux/slices/user'
 
 function LoginCom() {
+  const dispatch = useDispatch();
   const { data: session } = useSession()
   //password options
   const { auth } = useSelector((state) => state.auth)
@@ -50,10 +52,12 @@ function LoginCom() {
   })
 
   const [data, setData] = useState()
-  const [loginUser, { loading, error }] = useMutation(LOGIN_USER, {
+  const [loginUser, { loading, error, data: apollodata }] = useMutation(LOGIN_USER, {
     update(proxy, { data: { loginUser: userData } }) {
       context.login(userData)
-      router.push('/')
+      console.log(userData)
+      dispatch(setUser(apollodata));
+      // router.push('/')
     },
     //   onError({ graphQLErrors }) {
     //     setErrorsgr(graphQLErrors);
@@ -61,8 +65,10 @@ function LoginCom() {
     //     // {errorsgr ? alert("incorrect email or password") : loginUser()}
     //     loginUser()
     // },
+    onCompleted: (result) => {
+      dispatch(setUser(result.loginUser));
+    },
     variables: { about: data },
-    // variables: {about: {email: dataEmail, password: dataPassword}},
   })
   function Error() {
     alert('Uncorrect email or password!')

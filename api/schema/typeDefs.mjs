@@ -15,7 +15,7 @@ const typeDefs = `#graphql
   }
   type User{
     id: ID
-    fullname: String
+    nick: String
     email: String
     role: String
     balance: String
