@@ -57,7 +57,7 @@ const typeDefs = `#graphql
   }
 
   type Mutation {
-    postMessage(id: ID, user: String, content: String): ID
+    postMessage(user: String, content: String, id: ID): String
 
     sendFriendRequest(from_email: String, nick: String) : User
     acceptFriendRequest(from_email: String, to_email: String) : User

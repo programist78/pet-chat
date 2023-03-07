@@ -1,7 +1,6 @@
 import '../styles/globals.scss'
 import { InMemoryCache } from '@apollo/client/cache'
 import { ApolloClient } from '@apollo/client/core/ApolloClient.js'
-import { createUploadLink } from 'apollo-upload-client'
 import nextApp, { AppContext } from 'next/app.js'
 import { createElement as h, useState, useEffect } from 'react'
 import { ApolloProvider } from '@apollo/client'
@@ -18,18 +17,59 @@ import * as core from '@apollo/client/core'
 import type { AppProps } from 'next/app'
 import { Orbitron } from '@next/font/google'
 import RootLayout from '../components/RootLayout'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
+import { split, HttpLink } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from "@apollo/client/link/ws";
+
 const orbitron = Orbitron({
   weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
 })
+
+const wsLink = 
+typeof window !== "undefined"
+  ?
+  new GraphQLWsLink(createClient({
+  url: "ws://localhost:4000/subscriptions",
+  connectionParams: {
+    // authToken: user.authToken
+    authToken: "AHAHHAHA"
+  }
+})) : null;
+  // const wsLink = new GraphQLWsLink({
+  //   uri: "ws://localhost:4000",
+  //   options: {
+  //     reconnect: true,
+  //   },
+  // });
+const httpLink = new HttpLink({
+  uri: 'http://localhost:4000/graphql'
+});
+const splitLink = 
+typeof window !== "undefined" && wsLink != null
+?
+  split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink,
+): httpLink;
 const createApolloClient = (cache = {}) =>
   new ApolloClient({
     ssrMode: typeof window === 'undefined',
     cache: new InMemoryCache().restore(cache),
-    link: createUploadLink({
-      uri: process.env.API_URI,
-      credentials: 'include',
-    }),
+    link: splitLink
+    // createUploadLink({
+    //   uri: process.env.API_URI,
+    //   credentials: 'include',
+    // }),
   })
 export const apolloClient = createApolloClient(core.ApolloCache)
 

@@ -120,11 +120,11 @@ const resolvers = {
             return user
         },
         //message
-        postMessage: async (parent,{ user,  content, id }) => {
-            const message = new Messages({ user, content, id })
+        postMessage: async (parent,{ user,  content}) => {
+            const message = new Messages({ user, content})
             let result = await message.save()
             pubsub.publish('MESSAGE_SENT', { messageSent: result });
-            return message.id;
+            return message.user;
         },
 
         //auth
