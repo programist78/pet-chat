@@ -31,14 +31,17 @@ const typeDefs = `#graphql
     token: String
   }
   type Message {
-  id: ID
+  id: String
   user: String
   content: String
   }
   type Query {
-    messages: [Message]
 
     getUser(email: String): User
+  }
+
+  type Subscription {
+    messages: Message
   }
 
   input LoginInput{
