@@ -1,0 +1,113 @@
+$font-size: 16px;
+
+.preback{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    // padding: 25vh 0 25vh 0;
+}
+
+.back{
+    width: 70vw;
+    height: auto;
+    margin-top: 25vh;
+    margin-bottom: 25vh;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid white;
+    padding: 1%;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title{
+    font-size: 56px;
+    color: purple;
+    font-weight: 500;
+}
+
+.grid{
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid white;
+    width: 100%;
+    padding: 2.5%;
+    min-height: 51vh;
+}
+
+.friend{
+    width: 100%;
+    border: 1px solid white;
+    border-radius: 3.5px;
+    height: auto;
+    padding: 0.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: center;
+    img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        background-color: white;
+    }
+}
+
+.nickname{
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.nick{
+    margin-left: 5px;
+    font-size: 24px;
+}
+
+.email{
+    margin-left: 5px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.348);
+}
+
+.buttons{
+    display: flex;
+    gap: 10px;
+}
+
+.chat, .delete{
+    background-color: none;
+    border: 1px solid white;
+    height: 50px;
+    width: 125px;
+    font-size: 24px;
+    color: darkblue;
+    border-radius: 3px;
+}
+
+.input_div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 25px;
+    input, button{
+        border: solid 1px white;
+        border-radius: 5px;
+        color: rgb(255, 255, 255);
+        // height: $font-size * 2;
+        padding: $font-size / 4;
+        background: rgba(255, 255, 255, 0.1);
+        font-size: $font-size;
+    }
+}

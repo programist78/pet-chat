@@ -49,7 +49,7 @@ export default function NavBar() {
                      :
                     <Link href="/auth/login"><p>Login</p></Link>
                     }   
-                    <p>Friends</p>
+                    <Link href="/friends"><p>Friends</p></Link>
                     <Link href="/"><p>Home</p></Link>
                 </div>
                 </animated.div>

@@ -20,9 +20,6 @@ const User = new mongoose.Schema(
     },
     status: {type: String},
     token: { type: String },
-    friend_sent: { type: mongoose.Schema.Types.Array },
-    friend_pending: { type: mongoose.Schema.Types.Array },
-    friends: { type: mongoose.Schema.Types.Array},
     avatarUrl: { type: String },
   },
   {

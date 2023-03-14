@@ -9,10 +9,6 @@ const typeDefs = `#graphql
   USER
   ADMIN
   }
-  type Friend {
-    email: String
-    nick: String
-  }
   type User{
     id: ID
     nick: String
@@ -22,9 +18,10 @@ const typeDefs = `#graphql
     donate: String
     status: String
     avatarUrl: String
-    friend_sent: [Friend]
-    friend_pending: [Friend]
-    friends: [Friend]
+  }
+  type Friend {
+    nick: String
+    email: String
   }
   type AuthPayload {
     user: User
@@ -37,7 +34,11 @@ const typeDefs = `#graphql
   }
   type Query {
 
-    getUser(email: String): User
+    getUser(input: String): User
+
+    getFriends(email: String) : [Friend]
+    getPending(email: String) : [Friend]
+    getSent(email: String) : [Friend]
   }
 
   type Subscription {
@@ -59,9 +60,10 @@ const typeDefs = `#graphql
   type Mutation {
     postMessage(user: String, content: String, id: ID): String
 
-    sendFriendRequest(from_email: String, nick: String) : User
-    acceptFriendRequest(from_email: String, to_email: String) : User
-    rejectFriendRequest(from_email: String, to_email: String) : User
+    sendFriendRequest(from_email: String, nick: String) : Friend
+    acceptFriendRequest(from_email: String, to_email: String) : Friend
+    rejectFriendRequest(from_email: String, to_email: String) : Friend
+    deleteFriend(from_email: String, to_email: String) : Friend
 
     loginUser(about: LoginInput!): AuthPayload
     registerUser(about: RegisterInput!): AuthPayload
