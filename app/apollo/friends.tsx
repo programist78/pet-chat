@@ -3,14 +3,8 @@ import { gql } from '@apollo/client'
 export const SEND_FRIEND = gql`
 mutation SendFriendRequest($fromEmail: String, $nick: String) {
   sendFriendRequest(from_email: $fromEmail, nick: $nick) {
-    id
     nick
     email
-    role
-    balance
-    donate
-    status
-    avatarUrl
   }
 }
 `

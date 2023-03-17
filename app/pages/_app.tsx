@@ -32,11 +32,7 @@ const wsLink =
 typeof window !== "undefined"
   ?
   new GraphQLWsLink(createClient({
-  url: "ws://localhost:4000/subscriptions",
-  connectionParams: {
-    // authToken: user.authToken
-    authToken: "AHAHHAHA"
-  }
+  url: "ws://localhost:4000/graphql"
 })) : null;
   // const wsLink = new GraphQLWsLink({
   //   uri: "ws://localhost:4000",

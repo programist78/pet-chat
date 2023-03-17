@@ -19,6 +19,11 @@ const typeDefs = `#graphql
     status: String
     avatarUrl: String
   }
+  type Body{
+    nick: String
+    email: String
+    avatarUrl: String
+  }
   type Friend {
     nick: String
     email: String
@@ -34,15 +39,25 @@ const typeDefs = `#graphql
   }
   type Query {
 
-    getUser(input: String): User
+    getUser(input: String): Body
 
     getFriends(email: String) : [Friend]
     getPending(email: String) : [Friend]
     getSent(email: String) : [Friend]
+
+    getMessages: [Message]
+  }
+
+  type Chat {
+    id: ID
+    user1: String
+    user2: String
+    messages: [Message]!
   }
 
   type Subscription {
     messages: Message
+    messagAdded(chatID: ID!): Message!
   }
 
   input LoginInput{
@@ -59,6 +74,7 @@ const typeDefs = `#graphql
 
   type Mutation {
     postMessage(user: String, content: String, id: ID): String
+    createChat(email1: String, email2: String, id:ID): Chat
 
     sendFriendRequest(from_email: String, nick: String) : Friend
     acceptFriendRequest(from_email: String, to_email: String) : Friend

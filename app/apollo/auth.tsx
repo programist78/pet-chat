@@ -37,15 +37,10 @@ mutation RegisterUser($about: RegisterInput!) {
 `
 
 export const GET_USER = gql`
-query Query($email: String) {
-  getUser(email: $email) {
-    id
+query GetUser($input: String) {
+  getUser(input: $input) {
     nick
     email
-    role
-    balance
-    donate
-    status
     avatarUrl
   }
 }

@@ -13,6 +13,7 @@ import nodemailer from 'nodemailer'
 import sendgridTransport from 'nodemailer-sendgrid-transport';
 import { PubSub, withFilter } from 'graphql-subscriptions';
 import Friends from '../models/Friends.js';
+import Chat from '../models/Chat.js';
 const __dirname = path.resolve();
 dotenv.config()
 
@@ -21,11 +22,9 @@ const pubsub = new PubSub();
 const resolvers = {
     Upload: GraphQLUpload,
     Query: {
-          //message
-        //   messages: async () => {
-        //     return await Messages.find()
-        // },
-        //auth
+        getMessages: async () => {
+            return await Messages.find()
+        },
         getUser: async(_parent, {input}, _context, _info) => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             let user
@@ -193,7 +192,24 @@ const resolvers = {
             pubsub.publish('MESSAGE_SENT', { messageSent: result });
             return message.user;
         },
-
+        //chat
+        createChat: async (parent, {email1, email2}) => {
+            const user1 = await User.findOne(
+                {email: email1}
+                );
+                if (!user1) {
+                    throw new ValidationError("Invalid email given- changestatus");
+                }
+            const user2 = await User.findOne(
+                {email: email2}
+                );
+                if (!user2) {
+                    throw new ValidationError("Invalid email given- changestatus");
+                }
+            const chat = new Chat({ user1: user1.email, user2: user2.email })
+            let result = await chat.save()
+            return result
+        },
         //auth
         registerUser: async(parent, args, context, info) => {
             try {
@@ -322,6 +338,9 @@ const resolvers = {
         //     return pubsub.asyncIterator(channel);
         //   },
         },
+        // messageAdded: {
+        //     subscribe: (_, { chatId }, { pubsub }) => pubsub.asyncIterator(`CHAT_${chatId}`)
+        //   },
       },
 }
 

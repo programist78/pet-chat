@@ -1,20 +1,39 @@
 import styles from './Chat.module.scss'
 import {TbCubeSend} from 'react-icons/tb'
-import {GET_MESSAGES} from '../../../apollo/messages'
-import { useSubscription } from '@apollo/client'
+import {CREATE_MESSAGE, GET_MESSAGES} from '../../../apollo/messages'
+import { useMutation, useSubscription } from '@apollo/client'
+import { useSelector } from 'react-redux'
+import { useState } from 'react'
 export default function Chat() {
-  const { data, loading } = useSubscription(
+  const { info } = useSelector((state) => state.info);
+  const [text, setText] = useState("")
+  const { data } = useSubscription(
     GET_MESSAGES
   );
+  const [createMessage, {error: sendError, loading: LoadingError}] = useMutation(CREATE_MESSAGE)
+  function Click(text) {
+    createMessage({
+      variables: {
+        user: info[1].user?.email, content: text
+      }
+    })
+  }
+
+  console.log(data)
+  // if (!data) return null
   return (
     <div className={styles.back}>
-        <div className={styles.chat_window}>
-          <h1>{data?.messages?.content}</h1>
-          <h1>{data?.messages?.user}</h1>
-        </div>
+    <div className={styles.chat_window}>
+    {data?.messages?.map((obj, key) => (
+                    <div className={styles.chat_window} key={key}>
+                    <p className={styles.nick}>{obj.user}</p>
+                        <p className={styles.email}>{obj.content}</p>
+                    </div>
+          ))}
+        </div> 
         <div className={styles.sendler}>
-            <input type="text"/>
-            <TbCubeSend className={styles.send}/>
+            <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+            <TbCubeSend className={styles.send} onClick={() => Click(text)}/>
         </div>
     </div>
   )
