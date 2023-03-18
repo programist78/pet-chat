@@ -19,17 +19,18 @@ mutation Mutation($about: LoginInput!) {
 `
 
 export const REGISTER_USER = gql`
-mutation RegisterUser($about: RegisterInput!) {
+mutation Mutation($about: RegisterInput!) {
   registerUser(about: $about) {
     user {
+      balance
       id
       nick
       email
       role
-      balance
       donate
       status
       avatarUrl
+      chats
     }
     token
   }

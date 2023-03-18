@@ -31,7 +31,7 @@ function RegisterCom() {
     auth || session ? router.push('/') : ''
   }
   const validationSchema = Yup.object().shape({
-    fullname: Yup.string().required('Fullname is required'),
+    nick: Yup.string().required('nick is required'),
     email: Yup.string().required('Email is required').email('Email is invalid'),
     password: Yup.string()
       .required('Password is required')
@@ -82,6 +82,8 @@ function RegisterCom() {
     // loginUser()
   }
 
+  console.log(data)
+
   const addClass = (className) => {
     setPrecentBar('')
     if (className) {
@@ -125,14 +127,14 @@ function RegisterCom() {
     <div className={styles.preback}>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.back}>
         <div className={styles.form_group}>
-          <label>Fullname</label>
+          <label>nick</label>
           <input
-            name="fullname"
+            name="nick"
             type="text"
-            {...register('fullname')}
-            className={`form-control ${errors.fullname ? 'is-invalid' : ''}`}
+            {...register('nick')}
+            className={`form-control ${errors.nick ? 'is-invalid' : ''}`}
           />
-          <div className="invalid-feedback">{errors.fullname?.message}</div>
+          <div className="invalid-feedback">{errors.nick?.message}</div>
         </div>
         <div className={styles.form_group}>
           <label>Email</label>

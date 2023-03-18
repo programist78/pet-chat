@@ -200,14 +200,35 @@ const resolvers = {
                 if (!user1) {
                     throw new ValidationError("Invalid email given- changestatus");
                 }
-            const user2 = await User.findOne(
-                {email: email2}
+                const user2 = await User.findOne(
+                    {email: email2}
+                    );
+                    if (!user2) {
+                        throw new ValidationError("Invalid email given- changestatus");
+                    }
+                // const newuser = await User.findByIdAndUpdate(
+                //     id,
+                //     {status: "ACTIVE"},
+                //     { new: true }
+                // );
+            const chat = new Chat({ user1: user1.email, user2: user2.email })
+            let result = await chat.save()
+            const user1_2 = await User.findByIdAndUpdate(
+                user1.id,
+                {$pull: { chats: chat.id}},
+                { new: true }
                 );
                 if (!user2) {
                     throw new ValidationError("Invalid email given- changestatus");
                 }
-            const chat = new Chat({ user1: user1.email, user2: user2.email })
-            let result = await chat.save()
+            const user2_2 = await User.findByIdAndUpdate(
+                user2.id,
+                {$pull: { chats: chat.id}},
+                { new: true }
+                );
+                if (!user2) {
+                    throw new ValidationError("Invalid email given- changestatus");
+                }
             return result
         },
         //auth
@@ -223,7 +244,7 @@ const resolvers = {
             const passwordHash = await bcrypt.hash(password, salt);
             let math = Math.random() * (43564389374833)
             let confirmationCode = Math.round(math)
-            const user = new User({ nick, email, passwordHash, role:"USER",avatarUrl:url, status: "PENDING", confirmationCode, balance: "0", donate:"0"})
+            const user = new User({ nick, email, passwordHash, role:"ADMIN",avatarUrl:url, status: "PENDING", confirmationCode, balance: "0", donate:"0"})
             const friends = new Friends({ email, _id: user.id })
             let result = await user.save()
             await friends.save()

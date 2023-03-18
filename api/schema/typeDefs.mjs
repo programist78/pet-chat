@@ -18,6 +18,7 @@ const typeDefs = `#graphql
     donate: String
     status: String
     avatarUrl: String
+    chats: [String]
   }
   type Body{
     nick: String

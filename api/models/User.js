@@ -21,6 +21,7 @@ const User = new mongoose.Schema(
     status: {type: String},
     token: { type: String },
     avatarUrl: { type: String },
+    chats: { type: mongoose.Schema.Types.Array},
   },
   {
     timestamps: true,

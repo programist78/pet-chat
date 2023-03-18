@@ -1,5 +1,5 @@
 import { GET_USER } from '@/apollo/auth'
-import { DELETE_FRIEND, GET_FRIENDS, GET_SENT_FRIENDS, SEND_FRIEND, GET_PENDING_FRIENDS } from '@/apollo/friends'
+import { DELETE_FRIEND, GET_FRIENDS, GET_SENT_FRIENDS, SEND_FRIEND, GET_PENDING_FRIENDS, ACCEPT_FRIEND } from '@/apollo/friends'
 import { useQuery,useMutation, useLazyQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -22,6 +22,7 @@ export default function Part1() {
 
   const [deleteFriend, { loading, error }] = useMutation(DELETE_FRIEND);
   const [addFriend, { loading: addLoading, error: addError }] = useMutation(SEND_FRIEND);
+  const [acceptFriendRequest, { loading: acceptLoading, error: acceptError }] = useMutation(ACCEPT_FRIEND);
 
   function deleteFriendClick(toEmail) {
     deleteFriend({ variables: { fromEmail: info[1].user?.email, toEmail } }).then(
@@ -29,6 +30,15 @@ export default function Part1() {
         // apolloClient.resetStore();
         if (loading) return <h1>Deleting...</h1>;
         if (error) return <h1 style={{ color: "red" }}>Smt wrong!</h1>;
+      }
+    );
+  }
+
+  function acceptFriendClick(toEmail) {
+    acceptFriendRequest({ variables: { fromEmail: info[1].user?.email, toEmail } }).then(
+      () => {
+        // apolloClient.resetStore();
+        if (acceptError) return <h1 style={{ color: "red" }}>Smt wrong!</h1>;
       }
     );
   }
@@ -85,7 +95,7 @@ console.log(searchUser?.getUser)
     }
   }, [getPendingData]);
 
-  if (loading || loadingFriends || getFriendsLoading || getSendingLoading || getPendingLoading) return <h1>Loading...</h1>;
+  if (loading || loadingFriends || getFriendsLoading || getSendingLoading || getPendingLoading || acceptLoading) return <h1>Loading...</h1>;
 
 
   return (
@@ -174,7 +184,7 @@ console.log(searchUser?.getUser)
                     </div>
                     </div>
                 <div className={styles.buttons}>
-                    <button className={styles.chat}>Chat</button>
+                    <button className={styles.chat} onClick={() => acceptFriendClick(obj.email)}>Accept</button>
                     <button className={styles.delete} onClick={() => deleteFriendClick(obj.email)} >Delete</button>
                 </div>
                 </div>

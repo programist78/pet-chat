@@ -26,8 +26,8 @@ export default function GetMe() {
       console.log(errors)
     },
   })
-  const [sendFriend, {error, data}] = useMutation(SEND_FRIEND, {
-  })
+  // const [sendFriend, {error, data}] = useMutation(SEND_FRIEND, {
+  // })
   const apolloClient = useApolloClient()
 
   function onChangeCP({ target: { validity, files } }) {
@@ -39,17 +39,17 @@ export default function GetMe() {
       })
   }
 
-  function sendClick() {
-    sendFriend({
-      variables: {
-        fromEmail: info[1]?.user?.email, nick: findF 
-      },
-    }).then(() => {
-      Swal.fire("Request were send!")
-    })
-  }
+  // function sendClick() {
+  //   sendFriend({
+  //     variables: {
+  //       fromEmail: info[1]?.user?.email, nick: findF 
+  //     },
+  //   }).then(() => {
+  //     Swal.fire("Request were send!")
+  //   })
+  // }
 
-  if (error) return Swal.fire("Undefined nick")
+  // if (error) return Swal.fire("Undefined nick")
   return (
     <div className={styles.preback}>
       <div className={styles.back}>
@@ -63,7 +63,7 @@ export default function GetMe() {
           <p>Your id:</p>
           <h3>{info[1]?.user?.id}</h3>
           <p>Your friends:</p>
-          {(info[1]?.user?.friends).map(obj => 
+          {(info[1]?.user?.friends)?.map(obj => 
             <div style={{backgroundColor: "whitesmoke", borderRadius: "5px", padding: "10px"}}>
             <h3>{obj.email}</h3>
             <br />
@@ -80,7 +80,7 @@ export default function GetMe() {
           />
           <div className={styles.find_friend}>
           <input type="text" value={findF}  onChange={(e) => setFindF(e.target.value)} />
-          <button onClick={sendClick}>Find!</button>
+          {/* <button onClick={sendClick}>Find!</button> */}
           </div>
         </div>
       </div>

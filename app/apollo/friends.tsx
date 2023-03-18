@@ -12,14 +12,8 @@ mutation SendFriendRequest($fromEmail: String, $nick: String) {
 export const ACCEPT_FRIEND = gql`
 mutation AcceptFriendRequest($fromEmail: String, $toEmail: String) {
   acceptFriendRequest(from_email: $fromEmail, to_email: $toEmail) {
-    id
     nick
     email
-    role
-    balance
-    donate
-    status
-    avatarUrl
   }
 }
 `
