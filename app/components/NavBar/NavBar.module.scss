@@ -13,6 +13,38 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    justify-content: space-between;
+    // gap: 100px;
+}
+
+.things{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+
+.timer{
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: yellow;
+    height: 35px;
+    border: 1px solid white;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.timer2{
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    height: 35px;
+    border: 1px solid white;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .nav{

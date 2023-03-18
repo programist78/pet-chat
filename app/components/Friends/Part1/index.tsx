@@ -35,7 +35,7 @@ export default function Part1() {
   }
 
   function acceptFriendClick(toEmail) {
-    acceptFriendRequest({ variables: { fromEmail: info[1].user?.email, toEmail } }).then(
+    acceptFriendRequest({ variables: { fromEmail:toEmail , toEmail: info[1].user?.email } }).then(
       () => {
         // apolloClient.resetStore();
         if (acceptError) return <h1 style={{ color: "red" }}>Smt wrong!</h1>;

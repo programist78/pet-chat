@@ -1,15 +1,33 @@
 import Image from 'next/image'
 import styles from './NavBar.module.scss'
 import {BiUserPlus} from 'react-icons/bi'
-import { useState, useContext } from 'react'
+import { useState, useContext,useEffect } from 'react'
 import { useSpring, animated } from '@react-spring/web'
 import { useSelector } from 'react-redux'
 import Link from 'next/link'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import storage from 'redux-persist/lib/storage'
 import { useRouter } from 'next/router'
+import { useIdleTimer } from 'react-idle-timer'
 import { AuthContext } from '../../hooks/AuthContext'
+
 export default function NavBar() {
+    const [elapsed, setElapsed] = useState<number>(0)
+
+    const { getElapsedTime } = useIdleTimer({
+      timeout: 10_000,
+      throttle: 500
+    })
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setElapsed(Math.ceil(getElapsedTime() / 1000))
+      }, 500)
+  
+      return () => {
+        clearInterval(interval)
+      }
+    })
     const router = useRouter()
     const [openMenu, setOpenMenu] = useState(false)
     const props = useSpring({
@@ -34,9 +52,18 @@ export default function NavBar() {
         router.push('/')
         // document.location.reload();
       }
+      const currentDate = new Date();
+const utcDate = new Date(currentDate.getTime() + currentDate.getTimezoneOffset() * 60000);
+
+let timeUTC = utcDate.toUTCString()
   return (
     <div className={styles.preback}>
+        <div></div>
         <div className={styles.back}>
+            <div className={styles.things}>
+                <div className={styles.timer}>{elapsed}</div>
+                <div className={styles.timer2}>{timeUTC}</div>
+            </div>
             <div className={styles.nav}>
                 {openMenu && 
                 <animated.div style={props2}>

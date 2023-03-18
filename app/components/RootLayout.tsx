@@ -8,12 +8,16 @@ import NavBar from './NavBar'
 import { addUsertoLocal } from '../redux/slices/auth'
 import { addAdmintoLocal } from '../redux/slices/roles/admin'
 import { addPeopletoLocal } from '../redux/slices/roles/people'
+import Swal from 'sweetalert2'
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const handledle = () => {
+    Swal.fire("Unactive 10 minutes!")
+  }
   const router = useRouter()
   const dispatch = useDispatch()
   const [isPeople, setIsPeople] = useState()
@@ -33,10 +37,8 @@ export default function RootLayout({
   const { people } = useSelector((state) => state.people)
   return (
     <>
-      <>
         <NavBar />
         {children}
-      </>
     </>
   )
 }

@@ -22,7 +22,13 @@ import { createClient } from 'graphql-ws';
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from "@apollo/client/link/ws";
-
+import Router from 'next/router'
+import NProgress from 'nprogress'
+Router.events.on('routeChangeStart', () => NProgress.start()); 
+Router.events.on('routeChangeComplete', () => NProgress.done()); 
+Router.events.on('routeChangeError', () => NProgress.done());
+// import 'nprogress/nprogress.css';
+import '../styles/Nprogress.scss';
 const orbitron = Orbitron({
   weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
@@ -104,9 +110,9 @@ AppProps) => {
         <Provider store={store}>
           <AuthProvider>
             <PersistGate persistor={persistor}>
-              {loadingcomponent ? (
+              {/* {loadingcomponent ? (
                 <Loader />
-              ) : (
+              ) : ( */}
                 <>
                   {/* <Head></Head> */}
                   <RootLayout>
@@ -115,7 +121,7 @@ AppProps) => {
                     </main>
                   </RootLayout>
                 </>
-              )}
+              {/* )} */}
             </PersistGate>
           </AuthProvider>
         </Provider>
