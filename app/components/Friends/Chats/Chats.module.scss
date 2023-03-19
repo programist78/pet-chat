@@ -1,0 +1,39 @@
+.back{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 75px;
+    align-items: center;
+    gap: 25px;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.logo{
+    border: 1px solid white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+}
+
+.info{
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
+
+.name{
+    font-weight: 700;
+    color: rgb(102, 102, 220);
+}
+
+.lastMessage{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    .user{
+        opacity: 0.25;
+    }
+    .content{}
+}

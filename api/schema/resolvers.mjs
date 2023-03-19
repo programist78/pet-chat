@@ -73,6 +73,15 @@ const resolvers = {
                 }
                 return user.friend_pending
         },
+        getChats: async (_parent, {email}, _context, _info) => {
+            const user = await User.findOne({email})
+            const list = await Promise.all(
+                user.chats.map((chat) => {
+                    return Chat.findById(chat)
+                }),
+                )
+            return list
+        }
     },
     
     Mutation: {
@@ -186,11 +195,27 @@ const resolvers = {
             return user
         },
         //message
-        postMessage: async (parent,{ user,  content}) => {
-            const message = new Messages({ user, content})
-            let result = await message.save()
-            pubsub.publish('MESSAGE_SENT', { messageSent: result });
-            return message.user;
+        postMessage: async (parent,{ user,  content, id}) => {
+            const chat = await Chat.findById(
+                id
+                );
+                if (!chat) {
+                    throw new ValidationError("Chat is undefined");
+                }
+            const message = { user, content }
+            const chat2 = await Chat.findByIdAndUpdate(
+                chat.id,
+                {lastMessage: {user, content} ,$push: { messages: message}},
+                { new: true }
+                );
+                if (!chat2) {
+                    throw new ValidationError("Invalid email given- changestatus");
+                }
+            let result = await chat2.messages.slice(-1)[0]
+            console.log(result)
+            pubsub.publish(`CHAT_${id}`, { messageSent: result });
+            // pubsub.publish(`CHAT_${id}`);
+            return result;
         },
         //chat
         createChat: async (parent, {email1, email2}) => {
@@ -211,19 +236,19 @@ const resolvers = {
                 //     {status: "ACTIVE"},
                 //     { new: true }
                 // );
-            const chat = new Chat({ user1: user1.email, user2: user2.email })
+            const chat = new Chat({ user1: user1.email, user2: user2.email, lastMessage: "" })
             let result = await chat.save()
             const user1_2 = await User.findByIdAndUpdate(
                 user1.id,
-                {$pull: { chats: chat.id}},
+                {$push: { chats: chat.id}},
                 { new: true }
                 );
-                if (!user2) {
+                if (!user1) {
                     throw new ValidationError("Invalid email given- changestatus");
                 }
             const user2_2 = await User.findByIdAndUpdate(
                 user2.id,
-                {$pull: { chats: chat.id}},
+                {$push: { chats: chat.id}},
                 { new: true }
                 );
                 if (!user2) {
@@ -333,7 +358,7 @@ const resolvers = {
         messages: {
             // subscribe: () => pubsub.asyncIterator('MESSAGE_SENT')
             subscribe: withFilter(
-                () => pubsub.asyncIterator('MESSAGE_SENT'),
+                (_, { id }) => pubsub.asyncIterator(`CHAT_${id}`),
                 (payload, variables) => {
                   // Фильтрация сообщений по параметрам подписки
                   return true;
@@ -341,11 +366,11 @@ const resolvers = {
               ),
               resolve: (payload) => {
                 // Преобразование данных сообщения перед отправкой клиенту
-                console.log(payload.messageSent._id.toString())
+                // console.log(payload.messageSent._id.toString())
                 return {
                   user: payload.messageSent.user,
                   content: payload.messageSent.content,
-                  id: payload.messageSent._id.toString(),
+                //   id: payload.messageSent._id.toString(),
                 };
               },
         //   subscribe: (parent, args, { pubsub }) => {
@@ -360,7 +385,7 @@ const resolvers = {
         //   },
         },
         // messageAdded: {
-        //     subscribe: (_, { chatId }, { pubsub }) => pubsub.asyncIterator(`CHAT_${chatId}`)
+        //     subscribe: (_, { chatId }) => pubsub.asyncIterator(`CHAT_${chatId}`)
         //   },
       },
 }

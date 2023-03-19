@@ -5,11 +5,14 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import styles from './Part1.module.scss'
 import { FaUserFriends, FaHourglassEnd } from 'react-icons/fa';
-import { BsSendFill } from 'react-icons/bs';
+import { BsSendFill, BsFillChatLeftFill } from 'react-icons/bs';
+import Chats from '../Chats'
+import { CREATE_CHAT, GET_CHATS } from '@/apollo/messages'
 export default function Part1() {
   const [friends, setFriends] = useState();
   const [sendFriends, setSendFriends] = useState();
   const [pendingFriends, setPendingFriends] = useState();
+  const [allChats, setAllChats] = useState();
   const [searchUser, setSearchUser] = useState();
   const [presearch, setPreSearch] = useState("");
   const [openTab, setOpenTab] = useState("1")
@@ -23,6 +26,7 @@ export default function Part1() {
   const [deleteFriend, { loading, error }] = useMutation(DELETE_FRIEND);
   const [addFriend, { loading: addLoading, error: addError }] = useMutation(SEND_FRIEND);
   const [acceptFriendRequest, { loading: acceptLoading, error: acceptError }] = useMutation(ACCEPT_FRIEND);
+  const [createChat, { loading: createChatLoading, error: createChatError }] = useMutation(CREATE_CHAT);
 
   function deleteFriendClick(toEmail) {
     deleteFriend({ variables: { fromEmail: info[1].user?.email, toEmail } }).then(
@@ -49,6 +53,15 @@ export default function Part1() {
         // apolloClient.resetStore();
         if (addLoading) return <h1>Adding...</h1>;
         if (addError) return <h1 style={{ color: "red" }}>Smt wrong!</h1>;
+      }
+    );
+  }
+
+  function createChatClick(email2) {
+    createChat({ variables: { email1: info[1].user?.email, email2 } }).then(
+      () => {
+        // apolloClient.resetStore();
+        if (createChatError) return <h1 style={{ color: "red" }}>Smt wrong!</h1>;
       }
     );
   }
@@ -95,7 +108,19 @@ console.log(searchUser?.getUser)
     }
   }, [getPendingData]);
 
-  if (loading || loadingFriends || getFriendsLoading || getSendingLoading || getPendingLoading || acceptLoading) return <h1>Loading...</h1>;
+  const { loading: getChatsLoading, error: getChatsError, data: getChatsData } = useQuery(GET_CHATS, {
+    skip: !info[1]?.user?.email,
+    variables: { email: info[1]?.user?.email }
+  });
+
+    useEffect(() => {
+    if (getChatsData) {
+      setAllChats(getChatsData);
+    }
+  }, [getChatsData]);
+  
+
+  if (loading || loadingFriends || getFriendsLoading || getSendingLoading || getPendingLoading || acceptLoading || createChatLoading || getChatsLoading) return <h1>Loading...</h1>;
 
 
   return (
@@ -140,7 +165,7 @@ console.log(searchUser?.getUser)
                     </div>
                     </div>
                 <div className={styles.buttons}>
-                    <button className={styles.chat}>Chat</button>
+                    <button className={styles.chat} onClick={() => createChatClick(obj.email)}>Chat</button>
                     <button className={styles.delete} onClick={() => deleteFriendClick(obj.email)} >Delete</button>
                 </div>
                 </div>
@@ -192,6 +217,20 @@ console.log(searchUser?.getUser)
         </div>
         </>
         }
+        {openTab == "4" &&
+      <>
+      <p className={styles.title}>Chats</p>
+        <div className={styles.grid}>
+                    {allChats?.getChats?.map((obj, key) => (
+                        <Chats 
+                        user1={obj.user1}
+                        user2={obj.user2}
+                        lastMessage={obj.lastMessage}
+                        />
+          ))}
+        </div>
+        </>
+        }
     </div>
     <div className={styles.icons}>
       <div>
@@ -203,7 +242,9 @@ console.log(searchUser?.getUser)
       <div>
       <FaHourglassEnd onClick={() => setOpenTab("3")}  className={openTab == "3" ? styles.icon_active : styles.icon}/>
       </div>
-      
+      <div>
+      <BsFillChatLeftFill onClick={() => setOpenTab("4")}  className={openTab == "3" ? styles.icon_active : styles.icon}/>
+      </div>
     </div>
     </div>
   )

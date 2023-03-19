@@ -47,6 +47,19 @@ const typeDefs = `#graphql
     getSent(email: String) : [Friend]
 
     getMessages: [Message]
+    getChats(email: String): [ChatforGet] 
+  } 
+
+  type Sendler {
+    user: String
+    content: String
+  }
+
+  type ChatforGet {
+    id: ID
+    user1: String
+    user2: String
+    lastMessage: Sendler
   }
 
   type Chat {
@@ -57,8 +70,8 @@ const typeDefs = `#graphql
   }
 
   type Subscription {
-    messages: Message
-    messagAdded(chatID: ID!): Message!
+    messages(id: ID!): Message
+    messageAdded(chatID: ID!): Message!
   }
 
   input LoginInput{
@@ -74,7 +87,7 @@ const typeDefs = `#graphql
   }
 
   type Mutation {
-    postMessage(user: String, content: String, id: ID): String
+    postMessage(user: String, content: String, id: ID): Message
     createChat(email1: String, email2: String, id:ID): Chat
 
     sendFriendRequest(from_email: String, nick: String) : Friend

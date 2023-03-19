@@ -15,3 +15,32 @@ mutation Mutation($postMessageId: ID, $user: String, $content: String) {
     postMessage(id: $postMessageId, user: $user, content: $content)
 }
 `
+
+export const CREATE_CHAT = gql`
+mutation Mutation($email1: String, $email2: String, $createChatId: ID) {
+  createChat(email1: $email1, email2: $email2, id: $createChatId) {
+    user2
+    user1
+    messages {
+      user
+      id
+      content
+    }
+    id
+  }
+}
+`
+
+export const GET_CHATS = gql`
+query GetChats($email: String) {
+  getChats(email: $email) {
+    id
+    user1
+    user2
+    lastMessage {
+      user
+      content
+    }
+  }
+}
+`
