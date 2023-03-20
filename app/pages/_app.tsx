@@ -3,9 +3,8 @@ import { InMemoryCache } from '@apollo/client/cache'
 import { ApolloClient } from '@apollo/client/core/ApolloClient.js'
 import nextApp, { AppContext } from 'next/app.js'
 import { createElement as h, useState, useEffect } from 'react'
-import { ApolloProvider } from '@apollo/client'
 import { Provider } from 'react-redux'
-import store, { persistor } from '../redux/store.jsx'
+import store, { persistor } from '../redux/store'
 import { useRouter } from 'next/router'
 import { ApolloCache } from '@apollo/client/core'
 import { AuthProvider } from '../hooks/AuthContext.jsx'
@@ -19,11 +18,12 @@ import { Orbitron } from '@next/font/google'
 import RootLayout from '../components/RootLayout'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
-import { split, HttpLink } from '@apollo/client';
+import { split, HttpLink, from, ApolloProvider } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from "@apollo/client/link/ws";
 import Router from 'next/router'
 import NProgress from 'nprogress'
+import { onError } from "@apollo/client/link/error";
 Router.events.on('routeChangeStart', () => NProgress.start()); 
 Router.events.on('routeChangeComplete', () => NProgress.done()); 
 Router.events.on('routeChangeError', () => NProgress.done());
@@ -49,6 +49,16 @@ typeof window !== "undefined"
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql'
 });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const splitLink = 
 typeof window !== "undefined" && wsLink != null
 ?
@@ -67,7 +77,7 @@ const createApolloClient = (cache = {}) =>
   new ApolloClient({
     ssrMode: typeof window === 'undefined',
     cache: new InMemoryCache().restore(cache),
-    link: splitLink
+    link: from([errorLink, splitLink])
     // createUploadLink({
     //   uri: process.env.API_URI,
     //   credentials: 'include',

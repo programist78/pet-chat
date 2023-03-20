@@ -1,0 +1,29 @@
+.back{}
+
+@mixin info{
+    border-radius: 2vw;
+    border: solid 0.1vw white;
+    padding: 1.5vw;
+    padding-top: 0vw;
+    padding-bottom: 0vw;
+    height: auto;
+}
+
+.right{
+    float: right;
+    background-color: rgb(24, 9, 108);
+    @include info
+}
+
+.left{
+    float: left;
+    background-color: rgb(73, 9, 108);
+    @include info
+}
+
+.content{
+    color: rgb(147, 147, 147);;
+    line-height: 3vw;
+    max-width: 60vw;
+    font-size: 2vw;
+}

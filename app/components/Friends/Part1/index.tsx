@@ -223,6 +223,7 @@ console.log(searchUser?.getUser)
         <div className={styles.grid}>
                     {allChats?.getChats?.map((obj, key) => (
                         <Chats 
+                        chatId={obj.id}
                         user1={obj.user1}
                         user2={obj.user2}
                         lastMessage={obj.lastMessage}
@@ -243,7 +244,7 @@ console.log(searchUser?.getUser)
       <FaHourglassEnd onClick={() => setOpenTab("3")}  className={openTab == "3" ? styles.icon_active : styles.icon}/>
       </div>
       <div>
-      <BsFillChatLeftFill onClick={() => setOpenTab("4")}  className={openTab == "3" ? styles.icon_active : styles.icon}/>
+      <BsFillChatLeftFill onClick={() => setOpenTab("4")}  className={openTab == "4" ? styles.icon_active : styles.icon}/>
       </div>
     </div>
     </div>

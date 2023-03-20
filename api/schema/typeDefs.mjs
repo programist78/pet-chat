@@ -46,7 +46,7 @@ const typeDefs = `#graphql
     getPending(email: String) : [Friend]
     getSent(email: String) : [Friend]
 
-    getMessages: [Message]
+    getMessages(id: String): [Message]
     getChats(email: String): [ChatforGet] 
   } 
 

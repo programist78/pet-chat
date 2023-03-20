@@ -6,7 +6,7 @@ import { fileRenamer } from "../helpers/FileRenamer.js";
 import { issueAuthToken, serializeUser } from "../helpers/index.js";
 import path from "path";
 import fs from  'fs'
-
+import mongoose from 'mongoose';
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 import { ValidationError } from 'apollo-server-koa';
 import nodemailer from 'nodemailer'
@@ -22,8 +22,15 @@ const pubsub = new PubSub();
 const resolvers = {
     Upload: GraphQLUpload,
     Query: {
-        getMessages: async () => {
-            return await Messages.find()
+        getMessages: async (_parent, {id}, _context, _info) => {
+            let chat = await Chat.findById(id)
+            if (!chat) {
+                throw new ValidationError("Invalid id given - getMessages");
+            }
+            let messages = chat.messages.map((message) => {
+                return message
+            })
+            return messages
         },
         getUser: async(_parent, {input}, _context, _info) => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -202,10 +209,9 @@ const resolvers = {
                 if (!chat) {
                     throw new ValidationError("Chat is undefined");
                 }
-            const message = { user, content }
             const chat2 = await Chat.findByIdAndUpdate(
                 chat.id,
-                {lastMessage: {user, content} ,$push: { messages: message}},
+                {lastMessage: {user, content, _id: mongoose.Types.ObjectId()} ,$push: { messages: {user, content, _id: mongoose.Types.ObjectId()}}},
                 { new: true }
                 );
                 if (!chat2) {
@@ -370,7 +376,7 @@ const resolvers = {
                 return {
                   user: payload.messageSent.user,
                   content: payload.messageSent.content,
-                //   id: payload.messageSent._id.toString(),
+                  id: payload.messageSent._id,
                 };
               },
         //   subscribe: (parent, args, { pubsub }) => {

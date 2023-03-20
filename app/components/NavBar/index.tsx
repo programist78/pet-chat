@@ -44,7 +44,6 @@ export default function NavBar() {
       const { user, logout, authredux } = useContext(AuthContext)
       const { auth } = useSelector((state: any) => state.auth)
       const { info } = useSelector((state) => state.info)
-      console.log(info)
       const onLogout = () => {
         logout()
         signOut()

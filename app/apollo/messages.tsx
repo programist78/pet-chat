@@ -11,8 +11,12 @@ subscription Subscription {
 `;
 
 export const CREATE_MESSAGE = gql`
-mutation Mutation($postMessageId: ID, $user: String, $content: String) {
-    postMessage(id: $postMessageId, user: $user, content: $content)
+mutation PostMessage($user: String, $content: String, $postMessageId: ID) {
+  postMessage(user: $user, content: $content, id: $postMessageId) {
+    id
+    user
+    content
+  }
 }
 `
 

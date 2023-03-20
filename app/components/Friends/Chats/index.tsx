@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import styles from './Chats.module.scss'
 import { useSelector } from 'react-redux';
+import OpenChat from '../OpenChat';
 
 const Chat = ({
    user1, 
    user2,
-   lastMessage
+   lastMessage,
+   chatId
   }) => {
+    const [isOpen, setIsOpen] = useState(false)
     const [name, setName] = useState()
     const { info } = useSelector((state) => state.info);
     useEffect(() => {
@@ -19,7 +22,11 @@ const Chat = ({
     
 
   return (
-    <div className={styles.back}>
+    <>
+    {isOpen ?
+    <OpenChat chatId={chatId}/>
+    :
+    <div className={styles.back} onClick={() => setIsOpen(!isOpen)}>
     <img alt='user' src='/logo.png' className={styles.logo}/>
     <div className={styles.info}>
     <p className={styles.name}>{name}</p>
@@ -29,6 +36,8 @@ const Chat = ({
     </div>
     </div>
     </div>
+  }
+    </>
   )
 }
 
