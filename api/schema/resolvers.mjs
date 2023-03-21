@@ -362,21 +362,19 @@ const resolvers = {
     },
     Subscription: {
         messages: {
-            // subscribe: () => pubsub.asyncIterator('MESSAGE_SENT')
+            // subscribe: (_, { id }) => pubsub.asyncIterator([`CHAT_${id}`])
             subscribe: withFilter(
                 (_, { id }) => pubsub.asyncIterator(`CHAT_${id}`),
                 (payload, variables) => {
-                  // Фильтрация сообщений по параметрам подписки
                   return true;
                 }
               ),
               resolve: (payload) => {
-                // Преобразование данных сообщения перед отправкой клиенту
-                // console.log(payload.messageSent._id.toString())
+                console.log(payload)
                 return {
                   user: payload.messageSent.user,
                   content: payload.messageSent.content,
-                  id: payload.messageSent._id,
+                  _id: payload.messageSent._id.toString(),
                 };
               },
         //   subscribe: (parent, args, { pubsub }) => {
@@ -390,9 +388,9 @@ const resolvers = {
         //     return pubsub.asyncIterator(channel);
         //   },
         },
-        // messageAdded: {
-        //     subscribe: (_, { chatId }) => pubsub.asyncIterator(`CHAT_${chatId}`)
-        //   },
+        messageAdded: {
+            subscribe: (_, { chatId }) => pubsub.asyncIterator(`CHAT_${chatId}`)
+          },
       },
 }
 

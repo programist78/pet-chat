@@ -18,3 +18,20 @@
   html{
     background: linear-gradient(180deg, #09071E 0%, #400134 100%);
   }
+
+  html::-webkit-scrollbar {
+    width: 0.7vw;
+  }
+  
+  html::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background: #000000;
+  }
+  
+  html::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    
+    background: linear-gradient(180deg, #09071E 0%, #400134 100%);
+    transition: background-color 200ms linear;
+  }
+  

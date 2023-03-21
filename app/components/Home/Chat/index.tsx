@@ -7,9 +7,6 @@ import { useState } from 'react'
 export default function Chat() {
   const { info } = useSelector((state) => state.info);
   const [text, setText] = useState("")
-  const { data } = useSubscription(
-    GET_MESSAGES
-  );
   const [createMessage, {error: sendError, loading: LoadingError}] = useMutation(CREATE_MESSAGE)
   function Click(text) {
     createMessage({
@@ -19,11 +16,10 @@ export default function Chat() {
     })
   }
 
-  console.log(data)
   // if (!data) return null
   return (
     <div className={styles.back}>
-    <div className={styles.chat_window}>
+    {/* <div className={styles.chat_window}>
     {data?.messages?.map((obj, key) => (
                     <div className={styles.chat_window} key={key}>
                     <p className={styles.nick}>{obj.user}</p>
@@ -34,7 +30,7 @@ export default function Chat() {
         <div className={styles.sendler}>
             <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
             <TbCubeSend className={styles.send} onClick={() => Click(text)}/>
-        </div>
+        </div> */}
     </div>
   )
 }

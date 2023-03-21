@@ -33,7 +33,7 @@ export default function GetMe() {
   function onChangeCP({ target: { validity, files } }) {
     if (validity.valid && files && files[0])
       changeUserLogo({
-        variables: { file: files, changeUserLogoId: data?.getUser.id },
+        variables: { file: files, changeUserLogoId: info[1]?.user?.id  },
       }).then(() => {
         apolloClient.resetStore()
       })

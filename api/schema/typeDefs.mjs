@@ -34,7 +34,7 @@ const typeDefs = `#graphql
     token: String
   }
   type Message {
-  id: String
+  _id: String
   user: String
   content: String
   }
@@ -70,7 +70,7 @@ const typeDefs = `#graphql
   }
 
   type Subscription {
-    messages(id: ID!): Message
+    messages(id: ID!): [Message]
     messageAdded(chatID: ID!): Message!
   }
 

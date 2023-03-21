@@ -1,19 +1,29 @@
 import { gql } from "@apollo/client/core";
 
 export const GET_MESSAGES = gql`
-subscription Subscription {
-  messages {
-    id
+query GetMessages($getMessagesId: String) {
+  getMessages(id: $getMessagesId) {
     user
+    _id
     content
   }
 }
 `;
 
+export const SUBSCRIPTION_MESSAGES = gql`
+subscription Subscription($messagesId: ID!) {
+  messages(id: $messagesId) {
+    user
+    content
+    _id
+  }
+}
+`
+
 export const CREATE_MESSAGE = gql`
-mutation PostMessage($user: String, $content: String, $postMessageId: ID) {
+mutation Mutation($user: String, $content: String, $postMessageId: ID) {
   postMessage(user: $user, content: $content, id: $postMessageId) {
-    id
+    _id
     user
     content
   }

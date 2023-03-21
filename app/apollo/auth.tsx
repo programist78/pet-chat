@@ -48,7 +48,7 @@ query GetUser($input: String) {
 `
 
 export const CHANGE_USER_LOGO = gql`
-mutation Mutation($changeUserLogoId: ID, $file: [Upload]) {
+mutation ChangeUserLogo($changeUserLogoId: ID, $file: [Upload]) {
   changeUserLogo(id: $changeUserLogoId, file: $file) {
     user {
       id
@@ -59,6 +59,7 @@ mutation Mutation($changeUserLogoId: ID, $file: [Upload]) {
       donate
       status
       avatarUrl
+      chats
     }
     token
   }
