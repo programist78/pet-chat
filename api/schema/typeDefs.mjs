@@ -70,7 +70,7 @@ const typeDefs = `#graphql
   }
 
   type Subscription {
-    messages(id: ID!): [Message]
+    messages(id: ID!): Message
     messageAdded(chatID: ID!): Message!
   }
 

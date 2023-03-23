@@ -27,7 +27,7 @@ const resolvers = {
             if (!chat) {
                 throw new ValidationError("Invalid id given - getMessages");
             }
-            let messages = chat.messages.map((message) => {
+            let messages = chat.messages.slice(-100).map((message) => {
                 return message
             })
             return messages
@@ -219,7 +219,7 @@ const resolvers = {
                 }
             let result = await chat2.messages.slice(-1)[0]
             console.log(result)
-            pubsub.publish(`CHAT_${id}`, { messageSent: result });
+            pubsub.publish(`CHAT_${id}`, { messages: result });
             // pubsub.publish(`CHAT_${id}`);
             return result;
         },
@@ -363,20 +363,26 @@ const resolvers = {
     Subscription: {
         messages: {
             // subscribe: (_, { id }) => pubsub.asyncIterator([`CHAT_${id}`])
-            subscribe: withFilter(
-                (_, { id }) => pubsub.asyncIterator(`CHAT_${id}`),
-                (payload, variables) => {
-                  return true;
-                }
-              ),
-              resolve: (payload) => {
-                console.log(payload)
-                return {
-                  user: payload.messageSent.user,
-                  content: payload.messageSent.content,
-                  _id: payload.messageSent._id.toString(),
-                };
-              },
+            //1
+            // subscribe: withFilter(
+            //     (_, { id }) => pubsub.asyncIterator(`CHAT_${id}`),
+            //     (payload, variables) => {
+            //       return true;
+            //     }
+            //   ),
+            //   resolve: (payload) => {
+            //     console.log(payload)
+            //     return {
+            //       user: payload.messageSent.user,
+            //       content: payload.messageSent.content,
+            //       _id: payload.messageSent._id.toString(),
+            //     };
+            //   },
+            //2
+            subscribe: (parent, { id }) => {
+                return pubsub.asyncIterator(`CHAT_${id}`);
+              }
+            },
         //   subscribe: (parent, args, { pubsub }) => {
         //     const channel = Math.random().toString(36).slice(2, 15);
         //     onMessageUpdate(() => {
@@ -387,7 +393,7 @@ const resolvers = {
         //     }, 0);
         //     return pubsub.asyncIterator(channel);
         //   },
-        },
+
         messageAdded: {
             subscribe: (_, { chatId }) => pubsub.asyncIterator(`CHAT_${chatId}`)
           },
