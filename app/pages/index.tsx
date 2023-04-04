@@ -4,10 +4,14 @@ import { createRoot } from 'react-dom/client'
 import React, { useRef, useState } from 'react'
 import TextureComponent from "../components/Animation/TextureComponent"
 import { SphereGeometry } from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, Stage, Grid, OrbitControls, Environment } from '@react-three/drei'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import { easing } from 'maath'
+import Bananas from "../components/Animation/Bananas"
+import {FadeIn, LeftMiddle} from "../components/Animation/Elements" 
+import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import dynamic from 'next/dynamic'
+
+const DynamicBananas = dynamic(() => import('../components/Animation/Bananas'), {
+  loading: () => <p>Loading...</p>,
+})
 function Box(props) {
   // This reference will give us direct access to the mesh
   const mesh = useRef()
@@ -36,30 +40,35 @@ function Box(props) {
 }
 
 
-export default function Home() {
+
+
+
+// export default function Home() {
+//   return (
+//     <div className={styles.scene}>
+//     <Suspense fallback={null}>
+//         <Canvas shadows>
+//     <ambientLight intensity={0.01} />
+//   <directionalLight color="blue" position={[0.5, 0.5, 0]} />
+//     <Box position={[-1.2, 0, 0]} />
+//     <Box position={[1.2, -1, 0]} />
+//         </Canvas>
+//     </Suspense>
+//     </div>
+//   )
+// }
+
+export default function App() {
+  const [speed, set] = useState(1)
   return (
     <div className={styles.scene}>
-    <Suspense fallback={null}>
-        {/* <Canvas shadows>
-    <ambientLight intensity={0.01} />
-  <directionalLight color="blue" position={[0.5, 0.5, 0]} />
-    <Box position={[-1.2, 0, 0]} />
-    <Box position={[1.2, -1, 0]} />
-        </Canvas> */}
-            <Canvas gl={{ logarithmicDepthBuffer: true }} shadows camera={{ position: [-15, 0, 10], fov: 25 }}>
-      <fog attach="fog" args={['black', 15, 21.5]} />
-      <Stage intensity={0.5} environment="city" shadows={{ type: 'accumulative', bias: -0.001 }} adjustCamera={false}>
-        <Kamdo rotation={[0, Math.PI, 0]} />
-      </Stage>
-      <Grid renderOrder={-1} position={[0, -1.85, 0]} infiniteGrid cellSize={0.6} cellThickness={0.6} sectionSize={3.3} sectionThickness={1.5} sectionColor={[0.5, 0.5, 10]} fadeDistance={30} />
-      <OrbitControls autoRotate autoRotateSpeed={0.05} enableZoom={false} makeDefault minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} />
-      <EffectComposer disableNormalPass>
-        <Bloom luminanceThreshold={1} mipmapBlur />
-      </EffectComposer>
-      <Environment background preset="sunset" blur={0.8} />
-    </Canvas>
-    </Suspense>
+      <Suspense fallback={null}>
+        <DynamicBananas speed={speed} />
+        <FadeIn />
+      </Suspense>
+      <LeftMiddle>
+        <input type="range" min="0" max="10" value={speed} step="1" onChange={(e) => set(e.target.value)} />
+      </LeftMiddle>
     </div>
   )
 }
-
